@@ -83,9 +83,3 @@ class HackernewsAnalyzer(object):
                         results.add(tuple(item.items()))
         self.results = [dict(item) for item in results]
         return self.results
-
-
-if __name__ == '__main__':
-    news = Hackernews()
-    news.run('ruby', 3)
-    print(news.get_results())

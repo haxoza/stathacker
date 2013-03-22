@@ -5,28 +5,26 @@ from pyquery import PyQuery as pq
 
 class Hackernews(object):
     start_url = 'https://news.ycombinator.com/'
-    pages_to_crawl = 3
-    expressions = [r'.*coderwall\.com.*', '.*ruby.*']
 
     def __init__(self):
         self.items = []
         self.filtered_items = None
 
-    def run(self):
-        self.crawl()
-        self.analyze()
+    def run(self, keyword, pages=1):
+        self.crawl(pages)
+        self.analyze(keyword)
 
-    def crawl(self):
+    def crawl(self, pages):
         url = self.start_url
-        for _ in xrange(self.pages_to_crawl):
+        for _ in xrange(pages):
             response = requests.get(url)
             parser = HackernewsParser(response.content)
             parser.parse()
             self.items.extend(parser.get_items())
             url = self.start_url + parser.get_next_url()
 
-    def analyze(self):
-        analyzer = HackernewsAnalyzer(self.expressions, self.items)
+    def analyze(self, keyword):
+        analyzer = HackernewsAnalyzer([keyword], self.items)
         self.filtered_items = analyzer.analyze()
 
     def get_items(self):
@@ -70,14 +68,14 @@ class HackernewsParser(object):
 
 class HackernewsAnalyzer(object):
 
-    def __init__(self, expressions, items):
-        self.expressions = expressions
+    def __init__(self, words, items):
+        self.words = words
         self.items = items
         self.results = []
 
     def analyze(self):
         results = set()
-        patterns = [re.compile(e, re.IGNORECASE) for e in self.expressions]
+        patterns = [re.compile(r'.*{word}.*'.format(word=re.escape(w)), re.IGNORECASE) for w in self.words]
         for item in self.items:
             for key, value in item.iteritems():
                 for p in patterns:
@@ -89,5 +87,5 @@ class HackernewsAnalyzer(object):
 
 if __name__ == '__main__':
     news = Hackernews()
-    news.run()
+    news.run('ruby', 3)
     print(news.get_results())

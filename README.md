@@ -2,9 +2,7 @@ stathacker
 ==========
 
 Installation
-~~~~~~~~~~~~
-
-::
+------------
 
     $ git clone git@github.com:haxoza/stathacker.git stathacker
     $ cd stathacker
@@ -13,17 +11,13 @@ Installation
 
 
 Usage
-~~~~~
-
-::
+-----
 
     $ python runner.py
 
 
 Configuration
-~~~~~~~~~~~~~
-
-::
+-------------
 
     DOMAIN = 'coderwall.com'
 
@@ -31,6 +25,6 @@ Configuration
     CALLBACKS = ['callbacks.console']
 
 
-Set (``DOMAIN``) variable to domain name you would like to observe.
+Set `DOMAIN` variable to domain name you would like to observe.
 
-(``CALLBACKS``) is a list of functions that will be invoked when given plugin discover occurrence of domain.
+`CALLBACKS` is a list of functions that will be invoked when given plugin discover occurrence of domain.
